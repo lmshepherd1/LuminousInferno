@@ -1,0 +1,2 @@
+- Run `./release.sh`
+- Create a release on GitHub

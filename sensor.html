@@ -1,0 +1,45 @@
+<html ng-app="sensorInterface">
+	<head>
+	  <meta charset="utf-8" />
+	  <title>Sensor Web Interface</title> 
+	  <link rel="stylesheet" href="style.css" />
+	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+	  <script data-require="d3@*" data-semver="3.3.11" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.3.11/d3.js"></script>
+	  <script type="text/javascript" src="https://rawgit.com/chinmaymk/angular-charts/bower/dist/angular-charts.min.js"></script>
+	  <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+	  <script src="https://cdn.firebase.com/libs/angularfire/1.1.2/angularfire.min.js"></script>
+	  <script src="app.js"></script> 
+	  <script src ="text.js"></script>
+	  <script src="angular-charts-0.2.6/dist/angular-charts.js"></script>
+	  <script src="line-chart-master/build/line-chart.js"></script>
+	</head>
+	<body>		
+		<div class="container" ng-controller="TextCtrl">  
+			<center>
+				<h1>Sensor Web Interface</h1> 
+				<h2> Current Temperature =  </h2>   
+				<h3> Toggle temperature scale with radio buttons </h3> 
+				<h3> "No data available" if box is off -- conflicts with requirement 6 </h3> 
+				<h3> Press the button button - turns LEDs back on </h3> 
+				<h3> When box is on, graph is graphing </h3>  
+				<h3> min value, max value, phone number </h3> 
+				
+				<h3> 
+			</center>  
+			<div>
+				<button ng-click="click()" ng-bind="name"></button>  
+			</div>
+		</div> 
+		
+		 <div class="container" ng-controller="ChartCtrl"> 
+			<div>
+				<linechart class ="chart" data="data" options="options"></linechart>   
+			</div>
+			<div>
+				<input type="text" ng-model="newValue"/>
+				<button class="new" ng-click="click()">Click Here</button>
+			</div>
+		</div>  
+		
+	</body>
+</html>
