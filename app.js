@@ -1,4 +1,6 @@
-var sensorInterface = angular.module('sensorInterface', ['n3-line-chart', 'firebase']);
+var sensorInterface = angular.module('sensorInterface', ['n3-line-chart', 'firebase'] 
+  ); 
+
 
 sensorInterface.controller('ChartCtrl', ['$scope', '$firebaseArray', function($scope, $firebaseArray) {
   $scope.count = 0;
@@ -109,6 +111,12 @@ sensorInterface.controller('TextCtrl', function($scope) {
 
   $scope.updateTextInfo = function(){ 
     //Check for appropriate values
+  } 
+
+  $scope.sendText = function(){ 
+      var xmlhttp = new XMLHttpRequest();
+      xmlhttp.open("GET", "sendSMS.php?q=" + $scope.phoneNum, true);
+      xmlhttp.send();
   }
 	
 });

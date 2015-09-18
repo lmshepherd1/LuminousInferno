@@ -1,63 +1,80 @@
 <html ng-app="sensorInterface">
 	<head>
-	  <meta charset="utf-8" />
-	  <title>Sensor Web Interface</title> 
-	  <link rel="stylesheet" href="style.css" />
-	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
-	  <script data-require="d3@*" data-semver="3.3.11" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.3.11/d3.js"></script>
-	  <script type="text/javascript" src="https://rawgit.com/chinmaymk/angular-charts/bower/dist/angular-charts.min.js"></script>
-	  <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
-	  <script src="https://cdn.firebase.com/libs/angularfire/1.1.2/angularfire.min.js"></script>
-	  <script src="app.js"></script> 
-	  <script src ="text.js"></script>
-	  <script src="angular-charts-0.2.6/dist/angular-charts.js"></script>
-	  <script src="line-chart-master/build/line-chart.js"></script>
+		<meta charset="utf-8" />
+		<title>Sensor Web Interface</title> 
+		<link rel="stylesheet" href="style.css" />
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+		<script data-require="d3@*" data-semver="3.3.11" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.3.11/d3.js"></script>
+		<script type="text/javascript" src="https://rawgit.com/chinmaymk/angular-charts/bower/dist/angular-charts.min.js"></script>
+		<script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+		<script src="https://cdn.firebase.com/libs/angularfire/1.1.2/angularfire.min.js"></script>
+		<script src="app.js"></script> 
+		<script src ="text.js"></script>
+		<script src="angular-charts-0.2.6/dist/angular-charts.js"></script>
+		<script src="line-chart-master/build/line-chart.js"></script> 
+		<!-- Bootstrap -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 	</head>
 	<body>  
-		<!-- Box has power -->
-		<div>		
-			<div class="container" ng-controller="TextCtrl">  
+		<!-- Box has power --> 
+		<div class = "container"> 
+		<div class = "row">
+		<div class="panel panel-primary">	 
+			<div class = "panel-heading"> 
 				<center>
-					<h1>Sensor Web Interface</h1> 
+				<h2 class="panel-title" style="font-size:40px; font-weight:bold">Sensor Web Interface</h2>   
+				</center>
+			</div>	
+
+			<div class="container" ng-controller="TextCtrl">   
+				<div class = "panel-body"> 
+
+				<div class="row">  
+				<center> 
+					<div>
+						<button ng-click="changeLedState()" ng-bind="buttonText"></button>  
+					</div> 
 					<h2> Current Temperature = 
 						<span ng-bind="temp"></span>  
 						<span ng-if="celsiusScale">C</span> 
 						<span ng-if="!celsiusScale">F</span>
 
-					</h2>  
+					</h2>   
+					<div>
 					<label>  
 						<input type="radio" ng-model ="celsiusScale" ng-value = "true" ng-change = "convert()"/input>  
 						Celsius 
-					</label> 
+					</label>  
+					</div> 
+					<div>
 					<label>  
 						<input type="radio" ng-model ="celsiusScale" ng-value = "false" ng-change = "convert()"/input>  
 						Farenheit
 					</label>  
-
-					<div>
-						<button ng-click="changeLedState()" ng-bind="buttonText"></button>  
 					</div>  
+				</center>
+				</div> 
 
-					<h3> Cell Phone Feature</h3>   
+				<center>
+					<h3> Text Alert Feature</h3>   
 					<label> Phone Number: 
-						<input type="text" ng-model="phoneNum"/>
+						<input type="text" ng-model="phoneNum" placeholder="13195554444"/>
 					</label> 
 					<label> Minimum Threshold: 
-						<input type="text" ng-model="minValue"/>
+						<input type="text" ng-model="minValue" placeholder="30"/>
 					</label> 
 					<label> Maximum Threshold: 
-						<input type="text" ng-model="maxValue"/>
+						<input type="text" ng-model="maxValue" placeholder="60"/>
 					</label>   
 					<button ng-click="updateTextInfo()">Update Text Info</button>   
 
-
-					
-					<h3> "No data available" if box is off -- conflicts with requirement 6 </h3> 
-					<h3> Press the button button - turns LEDs back on </h3> 
-					<h3> When box is on, graph is graphing </h3>  
-					
-					<h3> 
+					<div>
+						<button ng-click="sendText()">SEND TEXT</button>  
+					</div>  					
 				</center>  
+				</body> 
 			</div> 
 			
 			 <div class="container" ng-controller="ChartCtrl"> 
@@ -67,11 +84,13 @@
 				<div>
 					<input type="text" ng-model="newValue"/>
 					<button class="new" ng-click="click()">Click Here</button>
-				</div>
+				</div> 
+									<h3> "No data available" if box is off -- conflicts with requirement 6 </h3> 
+					<h3> Press the button button - turns LEDs back on </h3> 
+					<h3> When box is on, graph is graphing </h3>  
 			</div>   
 		</div>  
 		<!--Box does not have power --> 
-		<div> 
-		</div>	
+		<div> 	
 	</body>
 </html>
