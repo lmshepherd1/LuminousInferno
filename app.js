@@ -79,10 +79,36 @@ sensorInterface.controller('ChartCtrl', ['$scope', '$firebaseArray', function($s
 }]);
 
 sensorInterface.controller('TextCtrl', function($scope) {
-	$scope.name = "Hello"; 
+	$scope.buttonText = "Turn Probe/LEDs On";   
+  $scope.probeOn = false; 
+  $scope.celsiusScale = false; 
+  $scope.temp = 32;  
+  $scope.phoneNum; 
+  $scope.minValue; 
+  $scope.maxValue;    
+
+  $scope.changeLedState = function() {  
+    if(!$scope.probeOn){ 
+      $scope.probeOn = true; 
+      $scope.buttonText = "Turn Probe/LEDs Off";  
+    }else{   
+      $scope.probeOn = false;
+      $scope.buttonText = "Turn Probe/LEDs On";  
+    }
+  }; 
+
+  $scope.convert = function(){   
+    if($scope.celsiusScale){    
+      //convert to celsius
+     $scope.temp = ($scope.temp - 32) / 1.8;
+    }else{    
+      //convert to farenheit
+      $scope.temp = ($scope.temp*1.8) + 32;
+    }
+  }; 
+
+  $scope.updateTextInfo = function(){ 
+    //Check for appropriate values
+  }
 	
-	$scope.click = function()
-    {
-      $scope.name = $scope.name + "!";
-    };
 });

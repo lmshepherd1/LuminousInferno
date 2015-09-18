@@ -13,33 +13,65 @@
 	  <script src="angular-charts-0.2.6/dist/angular-charts.js"></script>
 	  <script src="line-chart-master/build/line-chart.js"></script>
 	</head>
-	<body>		
-		<div class="container" ng-controller="TextCtrl">  
-			<center>
-				<h1>Sensor Web Interface</h1> 
-				<h2> Current Temperature =  </h2>   
-				<h3> Toggle temperature scale with radio buttons </h3> 
-				<h3> "No data available" if box is off -- conflicts with requirement 6 </h3> 
-				<h3> Press the button button - turns LEDs back on </h3> 
-				<h3> When box is on, graph is graphing </h3>  
-				<h3> min value, max value, phone number </h3> 
-				
-				<h3> 
-			</center>  
-			<div>
-				<button ng-click="click()" ng-bind="name"></button>  
-			</div>
-		</div> 
-		
-		 <div class="container" ng-controller="ChartCtrl"> 
-			<div>
-				<linechart class ="chart" data="data" options="options"></linechart>   
-			</div>
-			<div>
-				<input type="text" ng-model="newValue"/>
-				<button class="new" ng-click="click()">Click Here</button>
-			</div>
+	<body>  
+		<!-- Box has power -->
+		<div>		
+			<div class="container" ng-controller="TextCtrl">  
+				<center>
+					<h1>Sensor Web Interface</h1> 
+					<h2> Current Temperature = 
+						<span ng-bind="temp"></span>  
+						<span ng-if="celsiusScale">C</span> 
+						<span ng-if="!celsiusScale">F</span>
+
+					</h2>  
+					<label>  
+						<input type="radio" ng-model ="celsiusScale" ng-value = "true" ng-change = "convert()"/input>  
+						Celsius 
+					</label> 
+					<label>  
+						<input type="radio" ng-model ="celsiusScale" ng-value = "false" ng-change = "convert()"/input>  
+						Farenheit
+					</label>  
+
+					<div>
+						<button ng-click="changeLedState()" ng-bind="buttonText"></button>  
+					</div>  
+
+					<h3> Cell Phone Feature</h3>   
+					<label> Phone Number: 
+						<input type="text" ng-model="phoneNum"/>
+					</label> 
+					<label> Minimum Threshold: 
+						<input type="text" ng-model="minValue"/>
+					</label> 
+					<label> Maximum Threshold: 
+						<input type="text" ng-model="maxValue"/>
+					</label>   
+					<button ng-click="updateTextInfo()">Update Text Info</button>   
+
+
+					
+					<h3> "No data available" if box is off -- conflicts with requirement 6 </h3> 
+					<h3> Press the button button - turns LEDs back on </h3> 
+					<h3> When box is on, graph is graphing </h3>  
+					
+					<h3> 
+				</center>  
+			</div> 
+			
+			 <div class="container" ng-controller="ChartCtrl"> 
+				<div>
+					<linechart class ="chart" data="data" options="options"></linechart>   
+				</div>
+				<div>
+					<input type="text" ng-model="newValue"/>
+					<button class="new" ng-click="click()">Click Here</button>
+				</div>
+			</div>   
 		</div>  
-		
+		<!--Box does not have power --> 
+		<div> 
+		</div>	
 	</body>
 </html>
