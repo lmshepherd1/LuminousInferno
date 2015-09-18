@@ -1,6 +1,10 @@
 /* Put your css in here */
 
-.chart {
- width: 500px;
- height: 500px;
+#chart {
+ 	height: 500px;
+	border: 2px solid;
+	padding: 20px; 
+    width: 900px;
+    resize: both;
+    overflow: auto;
 }

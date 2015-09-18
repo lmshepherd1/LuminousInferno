@@ -1,3 +1,3 @@
-.controller('TextCtrl', function($scope) {
+sensorInterface.controller('TextCtrl', function($scope) {
 	$scope.name = "Hello";
 });

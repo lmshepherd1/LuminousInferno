@@ -10,6 +10,7 @@
 	  <script src="https://cdn.firebase.com/libs/angularfire/1.1.2/angularfire.min.js"></script>
 	  <script src="app.js"></script> 
 	  <script src ="text.js"></script>
+	  <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 	  <script src="angular-charts-0.2.6/dist/angular-charts.js"></script>
 	  <script src="line-chart-master/build/line-chart.js"></script>
 	</head>
@@ -33,7 +34,7 @@
 		
 		 <div class="container" ng-controller="ChartCtrl"> 
 			<div>
-				<linechart class ="chart" data="data" options="options"></linechart>   
+				<linechart id="chart" data="data" options="options"></linechart>   
 			</div>
 			<div>
 				<input type="text" ng-model="newValue"/>
