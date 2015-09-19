@@ -5,12 +5,15 @@
 	  <link rel="stylesheet" href="style.css" />
 	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
 	  <script data-require="d3@*" data-semver="3.3.11" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.3.11/d3.js"></script>
+	  <script src="//code.jquery.com/jquery-1.9.1.min.js"></script>
+	  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+	  <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
 	  <script type="text/javascript" src="https://rawgit.com/chinmaymk/angular-charts/bower/dist/angular-charts.min.js"></script>
 	  <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
 	  <script src="https://cdn.firebase.com/libs/angularfire/1.1.2/angularfire.min.js"></script>
 	  <script src="app.js"></script> 
-	  <script src ="text.js"></script>
-	  <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+	  <script src="text.js"></script>
+	  <script src="attrchange.js"></script>
 	  <script src="angular-charts-0.2.6/dist/angular-charts.js"></script>
 	  <script src="line-chart-master/build/line-chart.js"></script>
 	</head>
@@ -33,8 +36,8 @@
 		</div> 
 		
 		 <div class="container" ng-controller="ChartCtrl"> 
-			<div>
-				<linechart id="chart" data="data" options="options"></linechart>   
+			<div id="chart">
+				<linechart data="data" options="options"></linechart>   
 			</div>
 			<div>
 				<input type="text" ng-model="newValue"/>

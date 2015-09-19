@@ -117,16 +117,14 @@ directive('linechart', [
       };
       $(function () {
           var prevHeight = $('#test').height();
+          var prevWidth = $('#test').width();
           $('#chart').attrchange({
               callback: function (e) {
-                  var curHeight = $(this).height();
-                  var currWidth = $(this).width();            
-                  if (prevHeight !== curHeight) {
-                     // $('#logger').text('height changed from ' + prevHeight + ' to ' + curHeight);
-                      console.log(currWidth)
-                      console.log(curHeight)
-                      prevHeight = curHeight;
-                  }            
+                console.log('RESIZE2')
+                if (promise != null) {
+                  $timeout.cancel(promise);
+                }
+                return promise = $timeout(scope.redraw, 1);        
               }
           }).resizable();
       });
