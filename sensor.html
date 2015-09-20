@@ -22,7 +22,7 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 	</head>
 
-	<body>  
+	<body>   
 		<div class="container" ng-controller="MainCtrl"> 
 			<div class="panel panel-primary">	 
 				<div class = "panel-heading"> 
@@ -31,28 +31,39 @@
 					</center>
 				</div>	  
   
-				<div class = "panel-body">  
+				<div class = "panel-body">   
+					<!-- Box is on, sensor plugged in -->
+					<div ng-if = "!off"> 
+						<div ng-if = "!unplugged">
+							<div class="row">  					
+								<div temp-directive 
+									temp="temp"> 
+								</div>
+							</div>
 
-					<div class="row">  					
-						<div temp-directive 
-							temp="temp"> 
-						</div>
-					</div>
+							<div class="row"> 
+		 						<div chart-directive 
+		 							data = "data">
+		 						</div>
+							</div>   
 
-					<div class="row"> 
- 						<div chart-directive 
- 							data = "data">
- 						</div>
-					</div>   
-
-					<div class="row">  					
-						<div text-directive 
-							temp = "temp">
+							<div class="row">  					
+								<div text-directive 
+									temp = "temp">
+								</div>  
+							</div>  
 						</div>  
-						<h3> "No data available" if box is off -- conflicts with requirement 6 </h3> 
-						<h3> Press the button button - turns LEDs back on </h3> 
-						<h3> When box is on, graph is graphing </h3>  
-					</div>  
+
+						<!-- Box is on, sensor unplugged in-->
+						<div ng-if = "unplugged">
+							<center> <h1> Sensor Unplugged </h1> </center>
+						</div> 
+					</div>    
+
+					<!-- Box is off -->  
+					<div ng-if = "off">
+						<center> <h1> No Data Available </h1> </center>
+					</div>
 
 				</div> <!-- panel body -->
 			</div> <!-- panel -->

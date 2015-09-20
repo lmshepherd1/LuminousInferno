@@ -1,7 +1,9 @@
 var sensorInterface = angular.module('sensorInterface', ['n3-line-chart', 'firebase']);
 
 sensorInterface.controller("MainCtrl", function( $scope, $firebaseArray){
-  $scope.temp = 32;  
+  $scope.temp = 32;   
+  $scope.off = false; 
+  $scope.unplugged = true; 
 
   // Get a database reference to our posts
   var ref = new Firebase("https://luminous-inferno-1879.firebaseio.com/AngularData");
