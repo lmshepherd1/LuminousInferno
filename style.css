@@ -1,6 +1,6 @@
 /* Put your css in here */
 
-.chart {
- width: 500px;
- height: 500px;
+#chart {
+    width: 300px;
+    height: 300px;
 }
