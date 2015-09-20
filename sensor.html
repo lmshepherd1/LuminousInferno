@@ -17,80 +17,36 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 	</head>
+
 	<body>  
-		<!-- Box has power --> 
-		<div class = "container"> 
-		<div class = "row">
-		<div class="panel panel-primary">	 
-			<div class = "panel-heading"> 
-				<center>
-				<h2 class="panel-title" style="font-size:40px; font-weight:bold">Sensor Web Interface</h2>   
-				</center>
-			</div>	
-
-			<div class="container" ng-controller="TextCtrl">   
+		<div class="container" ng-controller="MainCtrl"> 
+			<div class="panel panel-primary">	 
+				<div class = "panel-heading"> 
+					<center>
+					<h2 class="panel-title" style="font-size:40px; font-weight:bold">Sensor Web Interface</h2>   
+					</center>
+				</div>	 
+  
 				<div class = "panel-body"> 
+					<div class="row">  					
+						<div temp-directive 
+							temp="temp"> 
+						</div>
+					</div>
 
-				<div class="row">  
-				<center> 
-					<div>
-						<button ng-click="changeLedState()" ng-bind="buttonText"></button>  
+					<div class="row"> 
+ 						<div chart-directive></div>
+					</div>   
+
+					<div class="row">  					
+						<div text-directive></div>  
+						<h3> "No data available" if box is off -- conflicts with requirement 6 </h3> 
+						<h3> Press the button button - turns LEDs back on </h3> 
+						<h3> When box is on, graph is graphing </h3>  
 					</div> 
-					<h2> Current Temperature = 
-						<span ng-bind="temp"></span>  
-						<span ng-if="celsiusScale">C</span> 
-						<span ng-if="!celsiusScale">F</span>
 
-					</h2>   
-					<div>
-					<label>  
-						<input type="radio" ng-model ="celsiusScale" ng-value = "true" ng-change = "convert()"/input>  
-						Celsius 
-					</label>  
-					</div> 
-					<div>
-					<label>  
-						<input type="radio" ng-model ="celsiusScale" ng-value = "false" ng-change = "convert()"/input>  
-						Farenheit
-					</label>  
-					</div>  
-				</center>
-				</div> 
-
-				<center>
-					<h3> Text Alert Feature</h3>   
-					<label> Phone Number: 
-						<input type="text" ng-model="phoneNum" placeholder="13195554444"/>
-					</label> 
-					<label> Minimum Threshold: 
-						<input type="text" ng-model="minValue" placeholder="30"/>
-					</label> 
-					<label> Maximum Threshold: 
-						<input type="text" ng-model="maxValue" placeholder="60"/>
-					</label>   
-					<button ng-click="updateTextInfo()">Update Text Info</button>   
-
-					<div>
-						<button ng-click="sendText()">SEND TEXT</button>  
-					</div>  					
-				</center>  
-				</body> 
-			</div> 
-			
-			 <div class="container" ng-controller="ChartCtrl"> 
-				<div>
-					<linechart class ="chart" data="data" options="options"></linechart>   
-				</div>
-				<div>
-					<input type="text" ng-model="newValue"/>
-					<button class="new" ng-click="click()">Click Here</button>
-				</div> 
-									<h3> "No data available" if box is off -- conflicts with requirement 6 </h3> 
-					<h3> Press the button button - turns LEDs back on </h3> 
-					<h3> When box is on, graph is graphing </h3>  
-			</div>   
-		</div>  
-		<!--Box does not have power --> 
+				</div> <!-- panel body -->
+			</div> <!-- panel -->
 		<div> 	
 	</body>
 </html>

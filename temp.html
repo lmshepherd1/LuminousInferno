@@ -1,0 +1,25 @@
+<div>
+	<center> 
+		<div>
+			<button ng-click="changeLedState()" ng-bind="buttonText"></button>  
+		</div> 
+		<h2> Current Temperature = 
+			<span ng-bind="temp"></span>  
+			<span ng-if="celsiusScale">C</span> 
+			<span ng-if="!celsiusScale">F</span>
+
+		</h2>   
+		<div>
+		<label>  
+			<input type="radio" ng-model ="celsiusScale" ng-value = "true" ng-change = "convert()"/input>  
+			Celsius 
+		</label>  
+		</div> 
+		<div>
+		<label>  
+			<input type="radio" ng-model ="celsiusScale" ng-value = "false" ng-change = "convert()"/input>  
+			Farenheit
+		</label>  
+		</div>  
+	</center> 
+</div>
