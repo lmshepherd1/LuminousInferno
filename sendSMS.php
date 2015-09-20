@@ -2,7 +2,8 @@
 require 'class-Clockwork.php'; 
 $API_KEY = "0cacf5553e6f0cc9a5b2d8a1e98884de562cb2fa"; 
 
-$q = $_REQUEST["q"];
+$q = $_REQUEST["q"]; 
+$m = $_REQUEST["m"];
 
 
 try
@@ -11,7 +12,7 @@ try
     $clockwork = new Clockwork( $API_KEY );
  
     // Setup and send a message
-    $message = array( 'to' => $q, 'message' => 'This is a test!' );
+    $message = array( 'to' => $q, 'message' => $m );
     $result = $clockwork->send( $message );
  
     // Check if the send was successful
