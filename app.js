@@ -3,7 +3,7 @@ var sensorInterface = angular.module('sensorInterface', ['n3-line-chart', 'fireb
 sensorInterface.controller("MainCtrl", function( $scope, $firebaseArray){
   $scope.temp = 32;   
   $scope.off = false; 
-  $scope.unplugged = true; 
+  $scope.unplugged = false; 
 
   // Get a database reference to our posts
   var ref = new Firebase("https://luminous-inferno-1879.firebaseio.com/AngularData");
@@ -29,28 +29,13 @@ sensorInterface.controller("MainCtrl", function( $scope, $firebaseArray){
       console.log("The read failed: " + errorObject.code);
   }); //end refon
 
-});//end controller 
->>>>>>> origin/Teamwork
+});//end controller
 
 sensorInterface.directive('tempDirective', function() 
 {  
   var controller = ['$scope', '$firebaseArray', function($scope, $firebaseArray) {
     $scope.buttonText = "Turn Probe/LEDs On";   
     $scope.probeOn = false; 
-<<<<<<< HEAD
-    $scope.celsiusScale = false;  
-
-    var ref2 = new Firebase("https://luminous-inferno-1879.firebaseio.com/PowerData");
-    // create a synchronized array
-    $scope.messages = $firebaseArray(ref2);
-    // add new items to the array
-    // the message is automatically added to our Firebase database!
-    $scope.addMessage = function() {
-      $scope.messages.$add({
-        text: $scope.newMessageText
-      });
-    };  
-=======
     $scope.celsiusScale = false;     
 
     var ref = new Firebase("https://luminous-inferno-1879.firebaseio.com/PowerData");
@@ -60,7 +45,6 @@ sensorInterface.directive('tempDirective', function()
         setting: false
       }
     });
->>>>>>> origin/Teamwork
 
     $scope.changeLedState = function() {  
       if(!$scope.probeOn){ 
