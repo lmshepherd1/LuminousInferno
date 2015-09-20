@@ -1,4 +1,3 @@
-
 /*
 line-chart - v1.1.11 - 23 August 2015
 https://github.com/n3-charts/line-chart
@@ -109,11 +108,25 @@ directive('linechart', [
       };
       promise = void 0;
       window_resize = function() {
+        console.log('RESIZE')
         if (promise != null) {
           $timeout.cancel(promise);
         }
         return promise = $timeout(scope.redraw, 1);
       };
+      $(function () {
+          var prevHeight = $('#test').height();
+          var prevWidth = $('#test').width();
+          $('#chart').attrchange({
+              callback: function (e) {
+                console.log('RESIZE2')
+                if (promise != null) {
+                  $timeout.cancel(promise);
+                }
+                return promise = $timeout(scope.redraw, 1);        
+              }
+          }).resizable();
+      });
       $window.addEventListener('resize', window_resize);
       scope.$watch('data', scope.redraw, true);
       scope.$watch('options', scope.redraw, true);
@@ -902,22 +915,22 @@ mod.factory('n3utils', [
         });
       },
       createGlass: function(svg, dimensions, handlers, axes, data, options, dispatch, columnWidth) {
-        console.log('svg')
-        console.log(svg)
-        console.log('dimensions')
-        console.log(dimensions)
-        console.log('handlers')
-        console.log(handlers)
-        console.log('axes')
-        console.log(axes)
-        console.log('data')
-        console.log(data)
-        console.log('options')
-        console.log(options)
-        console.log('dispatch')
-        console.log(dispatch)
-        console.log('columnWidth')
-        console.log(columnWidth)
+        // console.log('svg')
+        // console.log(svg)
+        // console.log('dimensions')
+        // console.log(dimensions)
+        // console.log('handlers')
+        // console.log(handlers)
+        // console.log('axes')
+        // console.log(axes)
+        // console.log('data')
+        // console.log(data)
+        // console.log('options')
+        // console.log(options)
+        // console.log('dispatch')
+        // console.log(dispatch)
+        // console.log('columnWidth')
+        // console.log(columnWidth)
         var glass, scrubberGroup, that;
         that = this;
         glass = svg.append('g').attr({
@@ -1393,6 +1406,8 @@ mod.factory('n3utils', [
         height = height - dimensions.top - dimensions.bottom;
         x = void 0;
         if (axesOptions.x.type === 'date') {
+          console.log('RANGE')
+          console.log(width)
           x = d3.time.scale().rangeRound([0, width]);
         } else {
           x = d3.scale.linear().rangeRound([0, width]);

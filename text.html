@@ -1,0 +1,19 @@
+<div>
+	<center>
+		<h3> Text Alert Feature</h3>   
+		<label> Phone Number: 
+			<input type="text" ng-model="phoneNum" placeholder="13195554444"/>
+		</label> 
+		<label> Minimum Threshold: 
+			<input type="text" ng-model="minValue" placeholder="30"/>
+		</label> 
+		<label> Maximum Threshold: 
+			<input type="text" ng-model="maxValue" placeholder="60"/>
+		</label>   
+		<button ng-click="updateTextInfo()">Update Text Info</button>   
+
+		<div>
+			<button ng-click="sendText()">SEND TEXT</button>  
+		</div>  					
+	</center>  
+</div> 
