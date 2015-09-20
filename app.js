@@ -1,15 +1,26 @@
 var sensorInterface = angular.module('sensorInterface', ['n3-line-chart', 'firebase']);
 
-sensorInterface.controller("MainCtrl", function( $scope ){
+sensorInterface.controller("MainCtrl", function( $scope){
   $scope.temp = 32;
 });
 
 sensorInterface.directive('tempDirective', function() 
 {  
-  var controller = ['$scope', function($scope) {
+  var controller = ['$scope', '$firebaseArray', function($scope, $firebaseArray) {
     $scope.buttonText = "Turn Probe/LEDs On";   
     $scope.probeOn = false; 
-    $scope.celsiusScale = false;    
+    $scope.celsiusScale = false;  
+
+    var ref2 = new Firebase("https://luminous-inferno-1879.firebaseio.com/PowerData");
+    // create a synchronized array
+    $scope.messages = $firebaseArray(ref2);
+    // add new items to the array
+    // the message is automatically added to our Firebase database!
+    $scope.addMessage = function() {
+      $scope.messages.$add({
+        text: $scope.newMessageText
+      });
+    };  
 
     $scope.changeLedState = function() {  
       if(!$scope.probeOn){ 
@@ -79,6 +90,7 @@ sensorInterface.directive('chartDirective', function()
     ref.on("value", function(snapshot) {
       //if the point is older than 300 s... get rid of it
       $scope.data.forEach(function(entry) { 
+        console.log(entry)
         if(entry.y === -1111)
         {
           console.log(entry.y)
@@ -119,7 +131,8 @@ sensorInterface.directive('chartDirective', function()
       axes: {
         x: {
           type: "date",
-          label: "Time past (seconds)"
+          label: "Time past (seconds)",
+          labelFunction: (function (d) { return ''; })
         }
       },
       series: [

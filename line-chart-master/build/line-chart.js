@@ -813,7 +813,7 @@ mod.factory('n3utils', [
         return {
           top: 20,
           right: 50,
-          bottom: 60,
+          bottom: 20,
           left: 50
         };
       },
@@ -1296,6 +1296,7 @@ mod.factory('n3utils', [
       },
       sanitizeAxes: function(axesOptions, secondAxis) {
         var _base;
+        // axesOptions.x.labelFunction = (function (d) { return ''; });
         if (axesOptions == null) {
           axesOptions = {};
         }
@@ -1412,6 +1413,7 @@ mod.factory('n3utils', [
         } else {
           x = d3.scale.linear().rangeRound([0, width]);
         }
+        console.log(x)
         xAxis = this.createAxis(x, 'x', axesOptions);
         y = void 0;
         if (axesOptions.y.type === 'log') {
@@ -1487,7 +1489,15 @@ mod.factory('n3utils', [
           o.ticks = [10, 15, 20, 25, 30, 35, 40, 45, 50]
         }
 
-        axis = d3.svg.axis().scale(scale).orient(sides[key]).innerTickSize(4).tickFormat(o != null ? o.ticksFormatter : void 0);
+        if(key === 'x')
+        {
+          axis = d3.svg.axis().scale(scale).orient(sides[key]).innerTickSize(4).tickFormat(o != null ? o.ticksFormatter : void 0);
+        }
+        else
+        {
+          axis = d3.svg.axis().scale(scale).orient(sides[key]).innerTickSize(4).tickFormat(o != null ? o.ticksFormatter : void 0);
+        }
+
         if (o == null) {
           return axis;
         }
