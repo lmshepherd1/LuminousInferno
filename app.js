@@ -1,10 +1,5 @@
 var sensorInterface = angular.module('sensorInterface', ['n3-line-chart', 'firebase']);
 
-<<<<<<< HEAD
-sensorInterface.controller("MainCtrl", function( $scope){
-  $scope.temp = 32;
-});
-=======
 sensorInterface.controller("MainCtrl", function( $scope, $firebaseArray){
   $scope.temp = 32;   
   $scope.off = false; 
