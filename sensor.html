@@ -30,11 +30,11 @@
 					<h2 class="panel-title" style="font-size:40px; font-weight:bold">Sensor Web Interface</h2>   
 					</center>
 				</div>	  
-  
-				<div class = "panel-body">   
-					<!-- Box is on, sensor plugged in -->
-					<div ng-if = "!off"> 
-						<div ng-if = "!unplugged">
+    
+				<!-- Box is on, sensor plugged in -->
+				<div ng-if = "!off">  
+					<div ng-if = "!unplugged"> 
+						<div class = "panel-body"> 
 							<div class="row">  					
 								<div temp-directive 
 									temp="temp"> 
@@ -46,23 +46,25 @@
 		 							data = "data" viewable-data="viewableData">
 		 						</div>
 							</div>   
+						</div> 
 
+						<div class="panel-footer">
 							<div class="row">  					
 								<div text-directive 
 									temp = "temp">
 								</div>  
-							</div>  
-						</div>  
+							</div>   
+						</div>
+					</div>   
 
-						<!-- Box is on, sensor unplugged in-->
-						<div ng-if = "unplugged">
-							<center> <h1> Sensor Unplugged </h1> </center>
-						</div> 
-					</div>    
+					<!-- Box is on, sensor unplugged in-->
+					<div ng-if = "unplugged">
+						<div class="panel-body"> <center> <h1> Sensor Unplugged </h1> </center></div>
+					</div>     
 
 					<!-- Box is off -->  
 					<div ng-if = "off">
-						<center> <h1> No Data Available </h1> </center>
+						<div class="panel-body"><center> <h1> No Data Available </h1> </center></div>
 					</div>
 
 				</div> <!-- panel body -->

@@ -62,7 +62,7 @@ sensorInterface.directive('tempDirective', function()
   var controller = ['$scope', '$firebaseArray', function($scope, $firebaseArray) {
     $scope.buttonText = "Turn Probe/LEDs On";   
     $scope.probeOn = false; 
-    $scope.celsiusScale = false;     
+    $scope.celsiusScale = true;     
 
     var ref = new Firebase("https://luminous-inferno-1879.firebaseio.com/PowerData");
     $scope.messages = $firebaseArray(ref);  
