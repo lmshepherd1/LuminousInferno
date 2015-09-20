@@ -9,13 +9,37 @@ sensorInterface.controller("MainCtrl", function( $scope, $firebaseArray){
   var ref = new Firebase("https://luminous-inferno-1879.firebaseio.com/AngularData");
   // create a synchronized array from what's in the db already
   $scope.data = $firebaseArray(ref); 
+  $scope.viewableData = [];
   
   // Attach an asynchronous callback to read the data at our posts reference
   ref.on("child_added", function(snapshot, prevChildKey) {
-    //if the point is older than 300 s... get rid of it  
+    console.log(snapshot.val())
+    //get the local version of the data
+    $scope.viewableData.push(snapshot.val())
+
+    //if the local point is older than 300 s... get rid of it
+    $scope.viewableData.forEach(function(entry) {
+      console.log(entry);
+      if(entry.y === -1111)
+      {
+        console.log(entry.y)
+      }
+      if(Math.abs(Date.now() - (entry.x)) > 300000)
+      {
+        console.log(entry)
+        $.each($scope.viewableData, function(i){
+            if($scope.viewableData[i].x === entry.x && $scope.viewableData[i].y === entry.y) {
+                $scope.viewableData.splice(i,1);
+                return false;
+            }
+        });
+      }
+    })
+
+    //if the db point is older than 300 s... get rid of it  
     var newPost = snapshot.val(); 
     $scope.temp = newPost.y; 
-    $scope.data.forEach(function(entry) { 
+    $scope.data.forEach(function(entry) {
       if(entry.y === -1111)
       {
         console.log(entry.y)
@@ -28,6 +52,8 @@ sensorInterface.controller("MainCtrl", function( $scope, $firebaseArray){
     }, function (errorObject) {
       console.log("The read failed: " + errorObject.code);
   }); //end refon
+
+  console.log($scope.viewableData)
 
 });//end controller
 
@@ -134,35 +160,6 @@ sensorInterface.directive('textDirective', function()
 sensorInterface.directive('chartDirective', function()  
 {  
   var controller = ['$scope', '$firebaseArray', function($scope, $firebaseArray) {
-    $scope.count = 0;
-    // Get a database reference to our posts
-    var ref = new Firebase("https://luminous-inferno-1879.firebaseio.com/AngularData");
-
-    // create a synchronized array from what's in the db already
-    $scope.data = $firebaseArray(ref);
-    
-    // Attach an asynchronous callback to read the data at our posts reference
-    ref.on("value", function(snapshot) {
-      //if the point is older than 300 s... get rid of it
-      $scope.data.forEach(function(entry) { 
-        console.log(entry)
-        if(entry.y === -1111)
-        {
-          console.log(entry.y)
-        }
-        if(Math.abs(Date.now() - (entry.x)) > 300000)
-        {
-          $scope.data.$remove(entry);
-        }
-        else
-        {
-          //continue
-        } 
-      })
-      console.log(snapshot.val());
-    }, function (errorObject) {
-      console.log("The read failed: " + errorObject.code);
-    });
 
     $scope.click = function()
     {
@@ -172,13 +169,10 @@ sensorInterface.directive('chartDirective', function()
         x: Date.now(),
         y: Number($scope.newValue)
       });
-      $scope.count += 1;
-
-      //figure out how to show a break instead of connecting line
-      if($scope.count>3 && $scope.count<8)
-      {
-        $scope.newValue = null;
-      }
+      $scope.viewableData.push({
+        x: Date.now(),
+        y: Number($scope.newValue)
+      })
     };
 
     //graph options
@@ -206,7 +200,8 @@ sensorInterface.directive('chartDirective', function()
   return{ 
     templateUrl: 'chart.html', 
     scope: { 
-      data: "="
+      data: "=",
+      viewableData: "="
     }, 
     controller: controller
   }//end return
