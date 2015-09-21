@@ -4,6 +4,7 @@ sensorInterface.controller("MainCtrl", function( $scope, $firebaseArray, $interv
   $scope.temp = 32;   
   $scope.off = true; 
   $scope.unplugged = true; 
+  var offValue = 5000;
 
   // Get a database reference to our posts
   var ref = new Firebase("https://luminous-inferno-1879.firebaseio.com/AngularData");
@@ -16,7 +17,7 @@ sensorInterface.controller("MainCtrl", function( $scope, $firebaseArray, $interv
     if(lastIndex > 0)
     { 
       var time = Math.abs(Date.now()-($scope.data[lastIndex-1].x)); 
-      if(Math.abs(Date.now()-($scope.data[lastIndex-1].x)) > 8000){ 
+      if(Math.abs(Date.now()-($scope.data[lastIndex-1].x)) > offValue){ 
         $scope.off = true;  
         $scope.viewableData.push({ 
           x: Date.now(), 
@@ -45,10 +46,20 @@ sensorInterface.controller("MainCtrl", function( $scope, $firebaseArray, $interv
     console.log(snapshot.val())
     //get the local version of the data
     $scope.viewableData.push(snapshot.val())
+    var oldEntry = $scope.viewableData[0];
 
     //if the local point is older than 300 s... get rid of it
     $scope.viewableData.forEach(function(entry) {
-      console.log(entry);
+      //reinvent the breaks on the front end
+      if(Math.abs(entry.x - (oldEntry.x)) > offValue)
+      {
+        $.each($scope.viewableData, function(i){
+          if($scope.viewableData[i].x === entry.x && $scope.viewableData[i].y === entry.y) {
+              $scope.viewableData.splice(i,0,{x: oldEntry.y+500, y: -12345});
+              return false;
+          }
+        });
+      }
       if(Math.abs(Date.now() - (entry.x)) > 300000)
       {
         console.log(entry)
@@ -59,6 +70,8 @@ sensorInterface.controller("MainCtrl", function( $scope, $firebaseArray, $interv
             }
         });
       }
+      //increment the old entry comparison pointer
+      oldEntry = entry;
     });
 
     //if the db point is older than 300 s... get rid of it  
