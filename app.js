@@ -63,8 +63,8 @@ sensorInterface.controller("MainCtrl", function( $scope, $firebaseArray, $interv
         $scope.data.$remove(entry);
       }
     })
-    }, function (errorObject) {
-      console.log("The read failed: " + errorObject.code);
+  }, function (errorObject) {
+    console.log("The read failed: " + errorObject.code);
   }); //end refon
 
   console.log($scope.viewableData)
@@ -206,7 +206,8 @@ sensorInterface.directive('chartDirective', function()
         }
       ],
       tooltip: {
-        mode: "scrubber"
+        // mode: "scrubber"
+        mode: 'none'
       },
       drawLegend: false
     };

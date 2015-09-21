@@ -596,7 +596,8 @@ mod.factory('n3utils', [
         var d, groups, legend, that, translateLegends;
         that = this;
         legend = svg.append('g').attr('class', 'legend');
-        d = 16;
+        //COMMENT FOR LAURA
+        d = 4;
         svg.select('defs').append('svg:clipPath').attr('id', 'legend-clip').append('circle').attr('r', d / 2);
         groups = legend.selectAll('.legendItem').data(series);
         groups.enter().append('g').on('click', function(s, i) {
@@ -637,12 +638,12 @@ mod.factory('n3utils', [
             'stroke-width': '2px',
             'd': that.getLegendItemPath(s, d, d)
           });
-          item.append('circle').attr({
-            'fill-opacity': 0,
-            'stroke': s.color,
-            'stroke-width': '2px',
-            'r': d / 2
-          });
+          // item.append('circle').attr({
+          //   'fill-opacity': 0,
+          //   'stroke': s.color,
+          //   'stroke-width': '2px',
+          //   'r': d / 2
+          // });
           return item.append('text').attr({
             'class': function(d, i) {
               return "legendText series_" + i;
@@ -980,7 +981,7 @@ mod.factory('n3utils', [
             'fill': 'white',
             'stroke': s.color,
             'stroke-width': '2px',
-            'r': 4
+            'r': 2
           });
         });
         if(dimensions.height>dimensions.top + dimensions.bottom)
