@@ -115,17 +115,19 @@ directive('linechart', [
         return promise = $timeout(scope.redraw, 1);
       };
       $(function () {
-          var prevHeight = $('#test').height();
-          var prevWidth = $('#test').width();
           $('#chart').attrchange({
               callback: function (e) {
-                console.log('RESIZE2')
                 if (promise != null) {
                   $timeout.cancel(promise);
                 }
                 return promise = $timeout(scope.redraw, 1);        
               }
-          }).resizable();
+          }).resizable({
+                  maxHeight: 500,
+                  maxWidth: 1100,
+                  minHeight: 150,
+                  minWidth: 200
+          });
       });
       $window.addEventListener('resize', window_resize);
       scope.$watch('data', scope.redraw, true);
