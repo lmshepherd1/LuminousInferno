@@ -1,4 +1,4 @@
-var sensorInterface = angular.module('sensorInterface', ['n3-line-chart', 'firebase']);
+﻿var sensorInterface = angular.module('sensorInterface', ['n3-line-chart', 'firebase']);
 
 sensorInterface.controller("MainCtrl", function( $scope, $firebaseArray, $interval){
   $scope.temp = 32;   
@@ -11,20 +11,21 @@ sensorInterface.controller("MainCtrl", function( $scope, $firebaseArray, $interv
   $scope.data = $firebaseArray(ref); 
   $scope.viewableData = [];
   
-  $scope.callAtInterval = function(){   
-    if($scope.viewableData)
-    var lastIndex = $scope.viewableData.length;   
-    if(Math.abs(Date.now() - ($scope.viewableData[lastIndex-1].x)) > 1000 ){ 
-      $scope.off = true; 
-      $scope.data.$add({ 
-        x: Date.now(), 
-        y: false
-      });
-    }else{ 
-      $scope.off = false; 
-    }
+  $scope.callAtInterval = function(){ 
+    var lastIndex = $scope.viewableData.length;  
+    if(lastIndex > 0)
+    {
+      if(Math.abs(Date.now() - ($scope.viewableData[lastIndex-1].x)) > 3000 ){ 
+        $scope.off = true; 
+        $scope.data.$add({ 
+          x: Date.now(), 
+          y: false
+        });
+      }else{ 
+	$scope.off = false; 
+      } 
 
-    if($scope.viewableData[lastIndex] == false){  
+      if($scope.viewableData[lastIndex] == false){  
       $scope.unplugged = true;
     }else{ 
       $scope.unplugged = false; 
@@ -41,10 +42,6 @@ sensorInterface.controller("MainCtrl", function( $scope, $firebaseArray, $interv
     //if the local point is older than 300 s... get rid of it
     $scope.viewableData.forEach(function(entry) {
       console.log(entry);
-      if(entry.y === -1111)
-      {
-        console.log(entry.y)
-      }
       if(Math.abs(Date.now() - (entry.x)) > 300000)
       {
         console.log(entry)
@@ -61,10 +58,6 @@ sensorInterface.controller("MainCtrl", function( $scope, $firebaseArray, $interv
     var newPost = snapshot.val(); 
     $scope.temp = newPost.y; 
     $scope.data.forEach(function(entry) {
-      if(entry.y === -1111)
-      {
-        console.log(entry.y)
-      }
       if(Math.abs(Date.now() - (entry.x)) > 300000)
       {
         $scope.data.$remove(entry);
