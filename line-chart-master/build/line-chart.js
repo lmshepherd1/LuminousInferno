@@ -123,10 +123,10 @@ directive('linechart', [
                 return promise = $timeout(scope.redraw, 1);        
               }
           }).resizable({
-                  maxHeight: 500,
-                  maxWidth: 1100,
-                  minHeight: 150,
-                  minWidth: 200
+                  maxHeight: $('#containment').height(),
+                  maxWidth: $('#containment').width(),
+                  minHeight: $('#containment').height()/3,
+                  minWidth: $('#containment').width()/3
           });
       });
       $window.addEventListener('resize', window_resize);
