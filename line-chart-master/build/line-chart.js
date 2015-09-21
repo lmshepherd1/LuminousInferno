@@ -596,7 +596,8 @@ mod.factory('n3utils', [
         var d, groups, legend, that, translateLegends;
         that = this;
         legend = svg.append('g').attr('class', 'legend');
-        d = 16;
+        //COMMENT FOR LAURA
+        d = 4;
         svg.select('defs').append('svg:clipPath').attr('id', 'legend-clip').append('circle').attr('r', d / 2);
         groups = legend.selectAll('.legendItem').data(series);
         groups.enter().append('g').on('click', function(s, i) {
@@ -637,12 +638,12 @@ mod.factory('n3utils', [
             'stroke-width': '2px',
             'd': that.getLegendItemPath(s, d, d)
           });
-          item.append('circle').attr({
-            'fill-opacity': 0,
-            'stroke': s.color,
-            'stroke-width': '2px',
-            'r': d / 2
-          });
+          // item.append('circle').attr({
+          //   'fill-opacity': 0,
+          //   'stroke': s.color,
+          //   'stroke-width': '2px',
+          //   'r': d / 2
+          // });
           return item.append('text').attr({
             'class': function(d, i) {
               return "legendText series_" + i;
@@ -791,7 +792,9 @@ mod.factory('n3utils', [
         return this;
       },
       createLeftLineDrawer: function(scales, mode, tension) {
-        return d3.svg.line().x(function(d) {
+        return d3.svg.line().defined(function(d) {
+          return !(d.y === false || d.y === -12345); 
+        }).x(function(d) {
           return scales.xScale(d.x);
         }).y(function(d) {
           return scales.yScale(d.y + d.y0);
@@ -813,7 +816,7 @@ mod.factory('n3utils', [
         return {
           top: 20,
           right: 50,
-          bottom: 60,
+          bottom: 20,
           left: 50
         };
       },
@@ -978,7 +981,7 @@ mod.factory('n3utils', [
             'fill': 'white',
             'stroke': s.color,
             'stroke-width': '2px',
-            'r': 4
+            'r': 2
           });
         });
         if(dimensions.height>dimensions.top + dimensions.bottom)
@@ -1296,6 +1299,7 @@ mod.factory('n3utils', [
       },
       sanitizeAxes: function(axesOptions, secondAxis) {
         var _base;
+        // axesOptions.x.labelFunction = (function (d) { return ''; });
         if (axesOptions == null) {
           axesOptions = {};
         }
@@ -1412,6 +1416,7 @@ mod.factory('n3utils', [
         } else {
           x = d3.scale.linear().rangeRound([0, width]);
         }
+        console.log(x)
         xAxis = this.createAxis(x, 'x', axesOptions);
         y = void 0;
         if (axesOptions.y.type === 'log') {
@@ -1487,7 +1492,15 @@ mod.factory('n3utils', [
           o.ticks = [10, 15, 20, 25, 30, 35, 40, 45, 50]
         }
 
-        axis = d3.svg.axis().scale(scale).orient(sides[key]).innerTickSize(4).tickFormat(o != null ? o.ticksFormatter : void 0);
+        if(key === 'x')
+        {
+          axis = d3.svg.axis().scale(scale).orient(sides[key]).innerTickSize(4).tickFormat(o != null ? o.ticksFormatter : void 0);
+        }
+        else
+        {
+          axis = d3.svg.axis().scale(scale).orient(sides[key]).innerTickSize(4).tickFormat(o != null ? o.ticksFormatter : void 0);
+        }
+
         if (o == null) {
           return axis;
         }

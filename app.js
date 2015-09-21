@@ -1,15 +1,107 @@
-var sensorInterface = angular.module('sensorInterface', ['n3-line-chart', 'firebase']);
+﻿var sensorInterface = angular.module('sensorInterface', ['n3-line-chart', 'firebase']);
 
-sensorInterface.controller("MainCtrl", function( $scope ){
-  $scope.temp = 32;
-});
+sensorInterface.controller("MainCtrl", function( $scope, $firebaseArray, $interval){
+  $scope.temp = 32;   
+  $scope.off = true; 
+  $scope.unplugged = true; 
+  var offValue = 8000;
+
+  // Get a database reference to our posts
+  var ref = new Firebase("https://luminous-inferno-1879.firebaseio.com/AngularData");
+  // create a synchronized array from what's in the db already
+  $scope.data = $firebaseArray(ref); 
+  $scope.viewableData = [];
+  
+  $scope.callAtInterval = function(){ 
+    var lastIndex = $scope.data.length;  
+    if(lastIndex > 0)
+    { 
+      var time = Math.abs(Date.now()-($scope.data[lastIndex-1].x)); 
+      if(Math.abs(Date.now()-($scope.data[lastIndex-1].x)) > offValue){ 
+        $scope.off = true;  
+        $scope.viewableData.push({ 
+          x: Date.now(), 
+          y: -12345
+        });
+        //check the oldest point to see if it is too old
+        if(Math.abs(Date.now() - ($scope.viewableData[0].x)) > 300000)
+        {
+          $scope.viewableData.splice(0,1)
+        }
+      }else{ 
+	       $scope.off = false; 
+      } 
+
+      if($scope.data[lastIndex-1] == false){  
+        $scope.unplugged = true;
+      }else{ 
+        $scope.unplugged = false; 
+      } 
+    }
+  };
+  $interval(function(){$scope.callAtInterval();}, 1000); 
+
+  // Attach an asynchronous callback to read the data at our posts reference
+  ref.on("child_added", function(snapshot, prevChildKey) {
+    //get the local version of the data
+    $scope.viewableData.push(snapshot.val())
+    var oldEntry = $scope.viewableData[0];
+
+    //if the local point is older than 300 s... get rid of it
+    $scope.viewableData.forEach(function(entry) {
+      /************COMMENT THIS OUT TO REVERT*********************/
+      //reinvent the breaks on the front end
+      if(Math.abs(entry.x - (oldEntry.x)) > offValue)
+      {
+        $.each($scope.viewableData, function(i){
+          if($scope.viewableData[i].x === entry.x && $scope.viewableData[i].y === entry.y) {
+              $scope.viewableData.splice(i,0,{x: oldEntry.y+Math.abs(entry.x - (oldEntry.x))/2, y: -12345});
+              return false;
+          }
+        });
+      }
+      /************************************************************/
+      if(Math.abs(Date.now() - (entry.x)) > 300000)
+      {
+        $.each($scope.viewableData, function(i){
+            if($scope.viewableData[i].x === entry.x && $scope.viewableData[i].y === entry.y) {
+                $scope.viewableData.splice(i,1);
+                return false;
+            }
+        });
+      }
+    //increment the old entry comparison pointer
+    oldEntry = entry;
+    });
+
+    //if the db point is older than 300 s... get rid of it  
+    var newPost = snapshot.val(); 
+    $scope.temp = newPost.y; 
+    $scope.data.forEach(function(entry) {
+      if(Math.abs(Date.now() - (entry.x)) > 300000)
+      {
+        $scope.data.$remove(entry);
+      }
+    })
+  }, function (errorObject) {
+      console.log("The read failed: " + errorObject.code);
+  }); //end refon
+});//end controller
 
 sensorInterface.directive('tempDirective', function() 
 {  
-  var controller = ['$scope', function($scope) {
+  var controller = ['$scope', '$firebaseArray', function($scope, $firebaseArray) {
     $scope.buttonText = "Turn Probe/LEDs On";   
     $scope.probeOn = false; 
-    $scope.celsiusScale = false;    
+    $scope.celsiusScale = true;     
+
+    var ref = new Firebase("https://luminous-inferno-1879.firebaseio.com/PowerData");
+    $scope.messages = $firebaseArray(ref);  
+    ref.set({ 
+      power: { 
+        setting: false
+      }
+    });
 
     $scope.changeLedState = function() {  
       if(!$scope.probeOn){ 
@@ -18,17 +110,25 @@ sensorInterface.directive('tempDirective', function()
       }else{   
         $scope.probeOn = false;
         $scope.buttonText = "Turn Probe/LEDs On";  
-      }
+      }   
+      ref.set({ 
+        power: { 
+          setting: $scope.probeOn
+        } 
+      });
     }; 
 
     $scope.convert = function(){   
       if($scope.celsiusScale){    
         //convert to celsius
-       $scope.temp = ($scope.temp - 32) / 1.8;
+       $scope.temp = ($scope.temp - 32) / 1.8;  
+       $scope.temp = $scope.temp.toFixed(2);
+
       }else{    
         //convert to farenheit
-        $scope.temp = ($scope.temp*1.8) + 32;
-      }
+        $scope.temp = ($scope.temp*1.8) + 32; 
+        $scope.temp = $scope.temp.toFixed(2);
+      }  
     }; 
   }]; 
   return{  
@@ -47,6 +147,7 @@ sensorInterface.directive('textDirective', function()
     $scope.phoneNum; 
     $scope.minValue; 
     $scope.maxValue;    
+    $scope.message;  
 
     $scope.updateTextInfo = function(){ 
       //Check for appropriate values
@@ -54,13 +155,35 @@ sensorInterface.directive('textDirective', function()
 
     $scope.sendText = function(){ 
         var xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("GET", "sendSMS.php?q=" + $scope.phoneNum, true);
-        xmlhttp.send();
-    } 
+        xmlhttp.open("GET", "sendSMS.php?q=" + $scope.phoneNum +"&m="+ $scope.message, true);
+        xmlhttp.send(); 
+    }  
+
+    $scope.$watch('temp', function(newVal, oldVal){ 
+      if(($scope.phoneNum != undefined) && ($scope.minValue != undefined) && ($scope.maxValue != undefined)){
+        if((oldVal > $scope.minValue) && (oldVal < $scope.maxValue)){ 
+          if(newVal < $scope.minValue){   
+            $scope.message = "Temperature below minimum value";
+            $scope.sendText(); 
+          }else if(newVal > $scope.maxValue){  
+            $scope.message = "Temperature above maximum value";
+            $scope.sendText(); 
+          }
+        }else if((oldVal < $scope.minValue) && (newVal > $scope.maxValue)){   
+          $scope.message = "Temperature above maximum value";
+          $scope.sendText();
+        }else if((oldVal > $scope.maxValue) && (newVal < $scope.minValue)){   
+          $scope.message = "Temperature below minimum value";
+          $scope.sendText();
+        }
+      }
+    });
   }];
   return{ 
     templateUrl: 'text.html', 
-    scope: {}, 
+    scope: { 
+      temp: "="
+    }, 
     controller: controller
   }//end return
 });//end directive 
@@ -68,34 +191,6 @@ sensorInterface.directive('textDirective', function()
 sensorInterface.directive('chartDirective', function()  
 {  
   var controller = ['$scope', '$firebaseArray', function($scope, $firebaseArray) {
-    $scope.count = 0;
-    // Get a database reference to our posts
-    var ref = new Firebase("https://luminous-inferno-1879.firebaseio.com/AngularData");
-
-    // create a synchronized array from what's in the db already
-    $scope.data = $firebaseArray(ref);
-    
-    // Attach an asynchronous callback to read the data at our posts reference
-    ref.on("value", function(snapshot) {
-      //if the point is older than 300 s... get rid of it
-      $scope.data.forEach(function(entry) { 
-        if(entry.y === -1111)
-        {
-          console.log(entry.y)
-        }
-        if(Math.abs(Date.now() - (entry.x)) > 300000)
-        {
-          $scope.data.$remove(entry);
-        }
-        else
-        {
-          //continue
-        } 
-      })
-      console.log(snapshot.val());
-    }, function (errorObject) {
-      console.log("The read failed: " + errorObject.code);
-    });
 
     $scope.click = function()
     {
@@ -105,13 +200,10 @@ sensorInterface.directive('chartDirective', function()
         x: Date.now(),
         y: Number($scope.newValue)
       });
-      $scope.count += 1;
-
-      //figure out how to show a break instead of connecting line
-      if($scope.count>3 && $scope.count<8)
-      {
-        $scope.newValue = null;
-      }
+      $scope.viewableData.push({
+        x: Date.now(),
+        y: Number($scope.newValue)
+      })
     };
 
     //graph options
@@ -119,7 +211,8 @@ sensorInterface.directive('chartDirective', function()
       axes: {
         x: {
           type: "date",
-          label: "Time past (seconds)"
+          label: "Time past (seconds)",
+          labelFunction: (function (d) { return ''; })
         }
       },
       series: [
@@ -131,13 +224,17 @@ sensorInterface.directive('chartDirective', function()
       ],
       tooltip: {
         mode: "scrubber"
+        // mode: 'none'
       },
       drawLegend: false
     };
   }];
   return{ 
     templateUrl: 'chart.html', 
-    scope: {}, 
+    scope: { 
+      data: "=",
+      viewableData: "="
+    }, 
     controller: controller
   }//end return
 });//end directive

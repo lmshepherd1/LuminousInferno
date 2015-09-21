@@ -8,14 +8,11 @@
 		<script src="//code.jquery.com/jquery-1.9.1.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
-		<script type="text/javascript" src="https://rawgit.com/chinmaymk/angular-charts/bower/dist/angular-charts.min.js"></script>
 		<script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
 		<script src="https://cdn.firebase.com/libs/angularfire/1.1.2/angularfire.min.js"></script> 
-	    <script src="text.js"></script>
 	    <script src="attrchange.js"></script>
 		<script src="app.js"></script> 
-
-		<script src="angular-charts-0.2.6/dist/angular-charts.js"></script>
+		
 		<script src="line-chart-master/build/line-chart.js"></script> 
 		<!-- Bootstrap -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
@@ -23,35 +20,51 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 	</head>
 
-	<body>  
+	<body>   
 		<div class="container" ng-controller="MainCtrl"> 
 			<div class="panel panel-primary">	 
 				<div class = "panel-heading"> 
 					<center>
 					<h2 class="panel-title" style="font-size:40px; font-weight:bold">Sensor Web Interface</h2>   
 					</center>
-				</div>	 
-  
-				<div class = "panel-body"> 
-					<div class="row">  					
-						<div temp-directive 
-							temp="temp"> 
-						</div>
+				</div> <!-- end panel header --> 
+
+				<div class = "panel-body">  
+					<div class="row">   
+						<!--Box is on -->
+						<div ng-if = "!off">  
+							<!-- Sensor Plugged In -->
+							<div ng-if = "!unplugged">   					
+								<div temp-directive 
+									temp="temp"> 
+								</div> 
+							</div>  
+							<!-- Sensor Unplugged-->
+							<div ng-if = "unplugged"> 
+								<center> <h1> Sensor Unplugged </h1> </center>
+							</div>
+						</div> 
+						<!-- Box is off -->  
+						<div ng-if = "off">
+							<center> <h1> No Data Available </h1> </center>
+						</div> 
 					</div>
 
 					<div class="row"> 
- 						<div chart-directive></div>
+ 						<div chart-directive 
+ 							data = "data" viewable-data="viewableData">
+ 						</div>
 					</div>   
+				</div> <!--end panel body -->
 
+				<div class="panel-footer">
 					<div class="row">  					
-						<div text-directive></div>  
-						<h3> "No data available" if box is off -- conflicts with requirement 6 </h3> 
-						<h3> Press the button button - turns LEDs back on </h3> 
-						<h3> When box is on, graph is graphing </h3>  
-					</div> 
-
-				</div> <!-- panel body -->
-			</div> <!-- panel -->
-		<div> 	
+						<div text-directive 
+							temp = "temp">
+						</div>  
+					</div>   
+				</div> <!-- end panel footer -->  			
+			</div> <!--end panel -->
+		<div><!-- end  main controller -->
 	</body>
 </html>
