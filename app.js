@@ -23,6 +23,13 @@ sensorInterface.controller("MainCtrl", function( $scope, $firebaseArray, $interv
           x: Date.now(), 
           y: -12345
         });
+        for(var j=0; j<10; j++)
+        {
+          if(Math.abs(Date.now() - ($scope.viewableData[j].x)) > 300000)
+          {
+            $scope.viewableData.splice(j,1)
+          }
+        }
       }else{ 
 	       $scope.off = false; 
       } 
@@ -69,7 +76,6 @@ sensorInterface.controller("MainCtrl", function( $scope, $firebaseArray, $interv
   }, function (errorObject) {
       console.log("The read failed: " + errorObject.code);
   }); //end refon
-
 });//end controller
 
 sensorInterface.directive('tempDirective', function() 
