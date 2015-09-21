@@ -205,7 +205,8 @@ sensorInterface.directive('chartDirective', function()
         }
       ],
       tooltip: {
-        mode: "scrubber"
+        // mode: "scrubber"
+        mode: 'none'
       },
       drawLegend: false
     };
