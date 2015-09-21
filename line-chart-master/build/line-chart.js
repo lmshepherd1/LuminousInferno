@@ -792,7 +792,7 @@ mod.factory('n3utils', [
       },
       createLeftLineDrawer: function(scales, mode, tension) {
         return d3.svg.line().defined(function(d) {
-          return !(d.y === false); 
+          return !(d.y === false || d.y === -12345); 
         }).x(function(d) {
           return scales.xScale(d.x);
         }).y(function(d) {

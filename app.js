@@ -14,24 +14,25 @@ sensorInterface.controller("MainCtrl", function( $scope, $firebaseArray, $interv
   $scope.callAtInterval = function(){ 
     var lastIndex = $scope.viewableData.length;  
     if(lastIndex > 0)
-    {
-      if(Math.abs(Date.now() - ($scope.viewableData[lastIndex-1].x)) > 3000 ){ 
+    { 
+      if((Math.abs(Date.now() - ($scope.viewableData[lastIndex-1].x)) > 3000) || ($scope.viewableData[lastIndex-1].y == -12345)){ 
         $scope.off = true; 
         $scope.data.$add({ 
           x: Date.now(), 
-          y: false
+          y: -12345
         });
       }else{ 
-	$scope.off = false; 
+	       $scope.off = false; 
       } 
 
-      if($scope.viewableData[lastIndex] == false){  
-      $scope.unplugged = true;
-    }else{ 
-      $scope.unplugged = false; 
+      if($scope.viewableData[lastIndex-1] == false){  
+        $scope.unplugged = true;
+      }else{ 
+        $scope.unplugged = false; 
+      } 
     }
   };
-  $interval(function(){$scope.callAtInterval();}, 1000); 
+  $interval(function(){$scope.callAtInterval();}, 4000); 
 
   // Attach an asynchronous callback to read the data at our posts reference
   ref.on("child_added", function(snapshot, prevChildKey) {
@@ -52,7 +53,7 @@ sensorInterface.controller("MainCtrl", function( $scope, $firebaseArray, $interv
             }
         });
       }
-    })
+    });
 
     //if the db point is older than 300 s... get rid of it  
     var newPost = snapshot.val(); 
@@ -63,11 +64,9 @@ sensorInterface.controller("MainCtrl", function( $scope, $firebaseArray, $interv
         $scope.data.$remove(entry);
       }
     })
-    }, function (errorObject) {
+  }, function (errorObject) {
       console.log("The read failed: " + errorObject.code);
   }); //end refon
-
-  console.log($scope.viewableData)
 
 });//end controller
 
