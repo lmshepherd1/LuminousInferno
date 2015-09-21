@@ -29,46 +29,44 @@
 					<center>
 					<h2 class="panel-title" style="font-size:40px; font-weight:bold">Sensor Web Interface</h2>   
 					</center>
-				</div>	  
-    
-				<!-- Box is on, sensor plugged in -->
-				<div ng-if = "!off">  
-					<div ng-if = "!unplugged"> 
-						<div class = "panel-body"> 
-							<div class="row">  					
+				</div> <!-- end panel header --> 
+
+				<div class = "panel-body">  
+					<div class="row">   
+						<!--Box is on -->
+						<div ng-if = "!off">  
+							<!-- Sensor Plugged In -->
+							<div ng-if = "!unplugged">   					
 								<div temp-directive 
 									temp="temp"> 
-								</div>
+								</div> 
+							</div>  
+							<!-- Sensor Unplugged-->
+							<div ng-if = "unplugged"> 
+								<center> <h1> Sensor Unplugged </h1> </center>
 							</div>
-
-							<div class="row"> 
-		 						<div chart-directive 
-		 							data = "data" viewable-data="viewableData">
-		 						</div>
-							</div>   
 						</div> 
-
-						<div class="panel-footer">
-							<div class="row">  					
-								<div text-directive 
-									temp = "temp">
-								</div>  
-							</div>   
-						</div>
-					</div>   
-
-					<!-- Box is on, sensor unplugged in-->
-					<div ng-if = "unplugged">
-						<div class="panel-body"> <center> <h1> Sensor Unplugged </h1> </center></div>
-					</div>     
-
-					<!-- Box is off -->  
-					<div ng-if = "off">
-						<div class="panel-body"><center> <h1> No Data Available </h1> </center></div>
+						<!-- Box is off -->  
+						<div ng-if = "off">
+							<center> <h1> No Data Available </h1> </center>
+						</div> 
 					</div>
 
-				</div> <!-- panel body -->
-			</div> <!-- panel -->
-		<div> 	
+					<div class="row"> 
+ 						<div chart-directive 
+ 							data = "data" viewable-data="viewableData">
+ 						</div>
+					</div>   
+				</div> <!--end panel body -->
+
+				<div class="panel-footer">
+					<div class="row">  					
+						<div text-directive 
+							temp = "temp">
+						</div>  
+					</div>   
+				</div> <!-- end panel footer -->  			
+			</div> <!--end panel -->
+		<div><!-- end  main controller -->
 	</body>
 </html>

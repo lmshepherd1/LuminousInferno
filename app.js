@@ -1,9 +1,9 @@
 var sensorInterface = angular.module('sensorInterface', ['n3-line-chart', 'firebase']);
 
-sensorInterface.controller("MainCtrl", function( $scope, $firebaseArray){
+sensorInterface.controller("MainCtrl", function( $scope, $firebaseArray, $interval){
   $scope.temp = 32;   
-  $scope.off = false; 
-  $scope.unplugged = false; 
+  $scope.off = true; 
+  $scope.unplugged = true; 
 
   // Get a database reference to our posts
   var ref = new Firebase("https://luminous-inferno-1879.firebaseio.com/AngularData");
@@ -11,6 +11,21 @@ sensorInterface.controller("MainCtrl", function( $scope, $firebaseArray){
   $scope.data = $firebaseArray(ref); 
   $scope.viewableData = [];
   
+  $scope.callAtInterval = function(){ 
+    var lastIndex = $scope.viewableData.length;  
+    if(Math.abs(Date.now() - ($scope.viewableData[lastIndex].x)) > 1000 ){ 
+      $scope.off = true; 
+      $scope.data.$add({ 
+        x: Date.now(), 
+        y: false
+      });
+    }
+    else if($scope.viewableData[lastIndex] == false){  
+      $scope.unplugged = true;
+    }
+  };
+  $interval(function(){$scope.callAtInterval();}, 1000); 
+
   // Attach an asynchronous callback to read the data at our posts reference
   ref.on("child_added", function(snapshot, prevChildKey) {
     console.log(snapshot.val())
