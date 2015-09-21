@@ -12,12 +12,14 @@ sensorInterface.controller("MainCtrl", function( $scope, $firebaseArray, $interv
   $scope.viewableData = [];
   
   $scope.callAtInterval = function(){ 
-    var lastIndex = $scope.viewableData.length;  
+    var lastIndex = $scope.data.length;  
     if(lastIndex > 0)
     { 
-      if((Math.abs(Date.now() - ($scope.viewableData[lastIndex-1].x)) > 3000) || ($scope.viewableData[lastIndex-1].y == -12345)){ 
-        $scope.off = true; 
-        $scope.data.$add({ 
+      var time = Math.abs(Date.now()-($scope.data[lastIndex-1].x)); 
+      console.log(time);
+      if(Math.abs(Date.now()-($scope.data[lastIndex-1].x)) > 8000){ 
+        $scope.off = true;  
+        $scope.viewableData.push({ 
           x: Date.now(), 
           y: -12345
         });
@@ -25,14 +27,14 @@ sensorInterface.controller("MainCtrl", function( $scope, $firebaseArray, $interv
 	       $scope.off = false; 
       } 
 
-      if($scope.viewableData[lastIndex-1] == false){  
+      if($scope.data[lastIndex-1] == false){  
         $scope.unplugged = true;
       }else{ 
         $scope.unplugged = false; 
       } 
     }
   };
-  $interval(function(){$scope.callAtInterval();}, 4000); 
+  $interval(function(){$scope.callAtInterval();}, 1000); 
 
   // Attach an asynchronous callback to read the data at our posts reference
   ref.on("child_added", function(snapshot, prevChildKey) {
