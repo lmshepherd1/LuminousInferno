@@ -20,10 +20,6 @@ sensorInterface.controller("MainCtrl", function( $scope, $firebaseArray){
     //if the local point is older than 300 s... get rid of it
     $scope.viewableData.forEach(function(entry) {
       console.log(entry);
-      if(entry.y === -1111)
-      {
-        console.log(entry.y)
-      }
       if(Math.abs(Date.now() - (entry.x)) > 300000)
       {
         console.log(entry)
@@ -40,10 +36,6 @@ sensorInterface.controller("MainCtrl", function( $scope, $firebaseArray){
     var newPost = snapshot.val(); 
     $scope.temp = newPost.y; 
     $scope.data.forEach(function(entry) {
-      if(entry.y === -1111)
-      {
-        console.log(entry.y)
-      }
       if(Math.abs(Date.now() - (entry.x)) > 300000)
       {
         $scope.data.$remove(entry);
