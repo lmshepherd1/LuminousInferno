@@ -11,17 +11,23 @@ sensorInterface.controller("MainCtrl", function( $scope, $firebaseArray, $interv
   $scope.data = $firebaseArray(ref); 
   $scope.viewableData = [];
   
-  $scope.callAtInterval = function(){ 
-    var lastIndex = $scope.viewableData.length;  
-    if(Math.abs(Date.now() - ($scope.viewableData[lastIndex].x)) > 1000 ){ 
+  $scope.callAtInterval = function(){   
+    if($scope.viewableData)
+    var lastIndex = $scope.viewableData.length;   
+    if(Math.abs(Date.now() - ($scope.viewableData[lastIndex-1].x)) > 1000 ){ 
       $scope.off = true; 
       $scope.data.$add({ 
         x: Date.now(), 
         y: false
       });
+    }else{ 
+      $scope.off = false; 
     }
-    else if($scope.viewableData[lastIndex] == false){  
+
+    if($scope.viewableData[lastIndex] == false){  
       $scope.unplugged = true;
+    }else{ 
+      $scope.unplugged = false; 
     }
   };
   $interval(function(){$scope.callAtInterval();}, 1000); 
