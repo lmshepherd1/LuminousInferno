@@ -16,19 +16,16 @@ sensorInterface.controller("MainCtrl", function( $scope, $firebaseArray, $interv
     if(lastIndex > 0)
     { 
       var time = Math.abs(Date.now()-($scope.data[lastIndex-1].x)); 
-      console.log(time);
       if(Math.abs(Date.now()-($scope.data[lastIndex-1].x)) > 8000){ 
         $scope.off = true;  
         $scope.viewableData.push({ 
           x: Date.now(), 
           y: -12345
         });
-        for(var j=0; j<10; j++)
+        //check the oldest point to see if it is too old
+        if(Math.abs(Date.now() - ($scope.viewableData[0].x)) > 300000)
         {
-          if(Math.abs(Date.now() - ($scope.viewableData[j].x)) > 300000)
-          {
-            $scope.viewableData.splice(j,1)
-          }
+          $scope.viewableData.splice(0,1)
         }
       }else{ 
 	       $scope.off = false; 
@@ -213,8 +210,8 @@ sensorInterface.directive('chartDirective', function()
         }
       ],
       tooltip: {
-        // mode: "scrubber"
-        mode: 'none'
+        mode: "scrubber"
+        // mode: 'none'
       },
       drawLegend: false
     };
