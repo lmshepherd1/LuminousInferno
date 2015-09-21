@@ -793,7 +793,7 @@ mod.factory('n3utils', [
       },
       createLeftLineDrawer: function(scales, mode, tension) {
         return d3.svg.line().defined(function(d) {
-          return !(d.y === false || d.y === -12345); 
+          return !(d.y === false); 
         }).x(function(d) {
           return scales.xScale(d.x);
         }).y(function(d) {
@@ -918,22 +918,6 @@ mod.factory('n3utils', [
         });
       },
       createGlass: function(svg, dimensions, handlers, axes, data, options, dispatch, columnWidth) {
-        // console.log('svg')
-        // console.log(svg)
-        // console.log('dimensions')
-        // console.log(dimensions)
-        // console.log('handlers')
-        // console.log(handlers)
-        // console.log('axes')
-        // console.log(axes)
-        // console.log('data')
-        // console.log(data)
-        // console.log('options')
-        // console.log(options)
-        // console.log('dispatch')
-        // console.log(dispatch)
-        // console.log('columnWidth')
-        // console.log(columnWidth)
         var glass, scrubberGroup, that;
         that = this;
         glass = svg.append('g').attr({

@@ -21,7 +21,7 @@ sensorInterface.controller("MainCtrl", function( $scope, $firebaseArray, $interv
         $scope.off = true;  
         $scope.viewableData.push({ 
           x: Date.now(), 
-          y: -12345
+          y: false
         });
         //check the oldest point to see if it is too old
         if(Math.abs(Date.now() - ($scope.viewableData[0].x)) > 300000)
@@ -55,7 +55,7 @@ sensorInterface.controller("MainCtrl", function( $scope, $firebaseArray, $interv
       {
         $.each($scope.viewableData, function(i){
           if($scope.viewableData[i].x === entry.x && $scope.viewableData[i].y === entry.y) {
-              $scope.viewableData.splice(i,0,{x: oldEntry.y+Math.abs(entry.x - (oldEntry.x))/2, y: -12345});
+              $scope.viewableData.splice(i,0,{x: oldEntry.y+Math.abs(entry.x - (oldEntry.x))/2, y: false});
               return false;
           }
         });
